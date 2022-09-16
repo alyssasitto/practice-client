@@ -11,6 +11,8 @@ function ProjectsPage() {
 	const [posts, setPosts] = useState([]);
 	const [postsCopy, setPostsCopy] = useState(posts);
 
+	const storedToken = localStorage.getItem("authToken");
+
 	const handleTitle = (e) => {
 		setTitle(e.target.value);
 	};
@@ -19,7 +21,7 @@ function ProjectsPage() {
 		setDescription(e.target.value);
 	};
 
-	const storedToken = localStorage.getItem("authToken");
+	console.log("TOKENNNNN", storedToken);
 
 	const getPosts = () => {
 		axios
@@ -27,10 +29,12 @@ function ProjectsPage() {
 				headers: { Authorization: `Bearer ${storedToken}` },
 			})
 			.then((response) => {
+				console.log(response);
+
 				setPosts(response.data.posts);
 			})
 			.catch((err) => {
-				console.log(err);
+				console.log("SOMETHING WENT WRONG", err);
 			});
 	};
 
@@ -39,20 +43,21 @@ function ProjectsPage() {
 
 		const info = { title, description };
 
+		console.log("this is the token", storedToken);
+
 		axios
 			.post(`${API_URL}/post/create-post`, {
 				headers: { Authorization: `Bearer ${storedToken}` },
-				info,
 			})
 			.then((response) => {
-				console.log(response);
+				console.log("THIS IS THE RESPONSE BIHH", response);
 
 				setTitle("");
 				setDescription("");
 				getPosts();
 			})
 			.catch((err) => {
-				console.log(err);
+				console.log("OH NOOOOO", err);
 			});
 	};
 
